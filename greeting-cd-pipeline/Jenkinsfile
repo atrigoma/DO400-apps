@@ -1,21 +1,21 @@
 pipeline {
-    agent { label 'nodejs' }
-
-    stages{
-        stage('Test'){
+    agent any
+    parameters {
+        string(name: "COMMIT")
+    }
+    stages {
+        stage('Rollback') {
             steps {
-                dir('greeting-cd-pipeline') {
-                    sh "node test.js"
+                script {
+                    if (params.COMMIT == null) {
+                        error("Please specify the COMMIT parameter")
+                    }
                 }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                sh '''
+                sh """
                     oc start-build greeting-metrics \
-                    --follow --wait -n qtdqid-metrics
-                '''
+                    --commit ${params.COMMIT} --follow --wait \
+                    -n qtdqid-metrics
+                """
             }
         }
     }
