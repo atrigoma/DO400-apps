@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'notifications',
-                    url: 'https://github.com/qtdqid/DO400-apps'
+                    url: 'https://github.com/atrigoma/DO400-apps'
             }
         }
         stage('Test') {
